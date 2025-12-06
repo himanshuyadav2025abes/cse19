@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FlipKart — Minimal Clone (HTML + CSS only)</title>
+  <meta name="description" content="A lightweight Flipkart-like storefront implemented using only HTML and CSS (no JavaScript)." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#2874f0; /* flipkart blue */
+      --accent-dark:#155fcc;
+      --muted:#6b7280;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --radius:12px;
+      --max:1200px;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: light;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{background:var(--bg);display:flex;flex-direction:column;align-items:center;padding:18px}
+
+    .shell{width:100%;max-width:var(--max);}
+
+    /* Top header */
+    header.topbar{display:flex;align-items:center;gap:16px;background:linear-gradient(90deg,var(--accent),var(--accent-dark));padding:10px;border-radius:12px;color:white}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}
+    .logo .mark{background:white;color:var(--accent);border-radius:6px;padding:6px 8px;font-weight:800}
+
+    /* search */
+    .searchbar{flex:1;display:flex;align-items:center;gap:8px}
+    .searchbar input{flex:1;padding:10px 12px;border-radius:8px;border:0;outline:none}
+    .searchbtn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);padding:9px 14px;border-radius:8px;color:white;cursor:pointer}
+
+    .top-actions{display:flex;gap:10px;align-items:center}
+    .top-actions a{background:rgba(255,255,255,0.12);padding:8px 10px;border-radius:8px;color:white;text-decoration:none;font-weight:600}
+
+    /* slim offers bar */n
+    .offers{display:flex;gap:12px;margin:12px 0;padding:10px;background:linear-gradient(180deg,#fff,#fbfbfb);border-radius:10px;align-items:center}
+    .offers .pill{background:linear-gradient(90deg,#fff6e5,#fff);padding:6px 10px;border-radius:999px;border:1px solid #f0e6d0;font-weight:600;color:#a36b00}
+
+    /* layout */
+    .layout{display:grid;grid-template-columns:240px 1fr;gap:16px}
+
+    /* sidebar */
+    aside.sidebar{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+    .filter-title{font-weight:700;margin-bottom:8px}
+    .category{display:flex;flex-direction:column;gap:6px}
+    .cat-item{padding:8px;border-radius:8px;color:var(--muted);text-decoration:none}
+    .cat-item:hover{background:#f6f8ff;color:var(--accent)}
+
+    /* content */
+    main.content{display:flex;flex-direction:column;gap:16px}
+
+    /* hero */
+    .hero{position:relative;background:linear-gradient(90deg,#fff,#fbfdff);padding:18px;border-radius:12px;display:flex;gap:16px;align-items:center}
+    .hero .carousel{flex:1;display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+    .hero .slide{min-width:320px;height:140px;border-radius:10px;background:linear-gradient(180deg,#dbe9ff,#f6fbff);padding:12px;display:flex;flex-direction:column;justify-content:center;scroll-snap-align:center}
+    .hero .cta{background:var(--accent);color:white;padding:14px 18px;border-radius:10px;text-decoration:none;font-weight:700}
+
+    /* product grid */
+    .products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 1px 6px rgba(16,24,40,0.06);display:flex;flex-direction:column;gap:8px}
+    .card img{width:100%;height:180px;object-fit:contain;border-radius:8px;background:linear-gradient(180deg,#fafafa,#fff)}
+    .card .title{font-weight:600;font-size:14px;color:#111}
+    .card .price{font-weight:700;color:var(--accent);font-size:16px}
+    .card .meta{color:var(--muted);font-size:13px}
+    .card .buy{margin-top:auto;background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:white;padding:10px;border-radius:8px;text-align:center;text-decoration:none;font-weight:600}
+
+    /* quick tags */
+    .tag{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:var(--accent);display:inline-block}
+
+    /* footer */
+    footer{margin-top:18px;padding:18px;background:transparent;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:1000px){
+      .products{grid-template-columns:repeat(3,1fr)}
+      .layout{grid-template-columns:200px 1fr}
+    }
+    @media (max-width:800px){
+      header.topbar{flex-wrap:wrap}
+      .layout{grid-template-columns:1fr;}
+      aside.sidebar{order:2}
+      .products{grid-template-columns:repeat(2,1fr)}
+      .hero .slide{min-width:260px}
+    }
+    @media (max-width:480px){
+      .products{grid-template-columns:repeat(1,1fr)}
+      .logo{font-size:16px}
+      .searchbar input{padding:9px}
+    }
+
+    /* small polish: image placeholder ratio */
+    .img-wrap{display:flex;align-items:center;justify-content:center;height:180px}
+    .price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar" role="banner">
+      <div class="logo" aria-label="Flipkart clone">
+        <div class="mark">FK</div>
+        <div>
+          FlipKart
+          <div style="font-size:12px;font-weight:400;opacity:0.9">Clone — HTML & CSS only</div>
+        </div>
+      </div>
+
+      <div class="searchbar" role="search">
+        <input type="search" placeholder="Search for products, brands and more" aria-label="Search" />
+        <button class="searchbtn" aria-hidden="true">Search</button>
+      </div>
+
+      <div class="top-actions">
+        <a href="#">Login</a>
+        <a href="#">More</a>
+        <a href="#">Cart</a>
+      </div>
+    </header>
+
+    <div class="offers">
+      <div class="pill">Great deals on electronics</div>
+      <div style="color:var(--muted);font-weight:600">Upto 70% off • Extra 10% with bank offers</div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Categories and filters">
+        <div class="filter-title">Shop by category</div>
+        <nav class="category" aria-label="categories">
+          <a class="cat-item" href="#">Mobiles</a>
+          <a class="cat-item" href="#">Electronics</a>
+          <a class="cat-item" href="#">Fashion</a>
+          <a class="cat-item" href="#">Home & Kitchen</a>
+          <a class="cat-item" href="#">Appliances</a>
+          <a class="cat-item" href="#">Toys & Baby</a>
+        </nav>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid #f3f4f6" />
+        <div class="filter-title">Filters</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="font-size:13px;color:var(--muted)"><input type="checkbox" /> &nbsp; Prime</label>
+          <label style="font-size:13px;color:var(--muted)"><input type="checkbox" /> &nbsp; New arrival</label>
+          <label style="font-size:13px;color:var(--muted)"><input type="checkbox" /> &nbsp; On sale</label>
+        </div>
+      </aside>
+
+      <main class="content" role="main">
+        <section class="hero" aria-label="Promotions">
+          <div class="carousel" role="list">
+            <article class="slide" role="listitem">
+              <strong style="font-size:16px">Big Sale — Electronics</strong>
+              <div style="margin-top:6px;color:var(--muted);font-size:14px">Phones, laptops and accessories — limited time</div>
+            </article>
+            <article class="slide" role="listitem">
+              <strong style="font-size:16px">Fashion Fest</strong>
+              <div style="margin-top:6px;color:var(--muted);font-size:14px">Up to 60% off on top brands</div>
+            </article>
+            <article class="slide" role="listitem">
+              <strong style="font-size:16px">Home Essentials</strong>
+              <div style="margin-top:6px;color:var(--muted);font-size:14px">Cookware, decor and more</div>
+            </article>
+          </div>
+          <a class="cta" href="#">Explore offers</a>
+        </section>
+
+        <section aria-label="Top Picks" style="display:flex;align-items:center;justify-content:space-between">
+          <h2 style="margin:0">Top picks for you</h2>
+          <div style="color:var(--muted);font-weight:600">Showing 1–12</div>
+        </section>
+
+        <section class="products" aria-label="Product grid">
+          <!-- Product card repeated -->
+
+          <article class="card" role="article">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Phone+1" alt="Phone 1" /></div>
+            <div class="title">Smartphone Model A</div>
+            <div class="meta">64GB • 4 GB RAM</div>
+            <div class="price-row"><div class="price">₹11,999</div><div class="tag">Deal</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Headphones" alt="Headphones" /></div>
+            <div class="title">Wireless Headphones</div>
+            <div class="meta">Bluetooth • 20hr battery</div>
+            <div class="price-row"><div class="price">₹2,499</div><div class="tag">Bestseller</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=TV" alt="LED TV" /></div>
+            <div class="title">32" Smart LED TV</div>
+            <div class="meta">HD • Built-in apps</div>
+            <div class="price-row"><div class="price">₹9,999</div><div class="tag">Limited</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Shoes" alt="Sports shoes" /></div>
+            <div class="title">Running Shoes</div>
+            <div class="meta">Men • Size 9</div>
+            <div class="price-row"><div class="price">₹1,299</div><div class="tag">New</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <!-- repeat more items to fill grid -->
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Mixer" alt="Mixer Grinder" /></div>
+            <div class="title">Mixer Grinder</div>
+            <div class="meta">750W • 3 jars</div>
+            <div class="price-row"><div class="price">₹2,899</div><div class="tag">Offer</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Watch" alt="Smart watch" /></div>
+            <div class="title">Smart Watch Pro</div>
+            <div class="meta">Heart rate • 7 days</div>
+            <div class="price-row"><div class="price">₹3,999</div><div class="tag">Trending</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Camera" alt="Portable Camera" /></div>
+            <div class="title">Instant Camera</div>
+            <div class="meta">Analog • Instant prints</div>
+            <div class="price-row"><div class="price">₹4,499</div><div class="tag">Deal</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Bag" alt="Backpack" /></div>
+            <div class="title">Travel Backpack</div>
+            <div class="meta">30L • Water resistant</div>
+            <div class="price-row"><div class="price">₹1,799</div><div class="tag">Bestseller</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=AC" alt="Air Conditioner" /></div>
+            <div class="title">1.5 Ton Split AC</div>
+            <div class="meta">3 Star • Copper</div>
+            <div class="price-row"><div class="price">₹29,999</div><div class="tag">Hot</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Kettle" alt="Electric kettle" /></div>
+            <div class="title">Electric Kettle</div>
+            <div class="meta">1.7L • Auto shut-off</div>
+            <div class="price-row"><div class="price">₹899</div><div class="tag">Offer</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Chair" alt="Office chair" /></div>
+            <div class="title">Ergonomic Office Chair</div>
+            <div class="meta">Mesh back • Adjustable</div>
+            <div class="price-row"><div class="price">₹4,199</div><div class="tag">New</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+          <article class="card">
+            <div class="img-wrap"><img src="https://via.placeholder.com/300x300?text=Lamp" alt="Study lamp" /></div>
+            <div class="title">LED Study Lamp</div>
+            <div class="meta">Eye-care • Dimmable</div>
+            <div class="price-row"><div class="price">₹499</div><div class="tag">Deal</div></div>
+            <a class="buy" href="#">Add to cart</a>
+          </article>
+
+        </section>
+
+        <footer>
+          © 2025 FlipKart Clone — demo. This page is built with only HTML and CSS. No JavaScript is used.
+        </footer>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>
